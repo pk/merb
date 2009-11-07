@@ -16,7 +16,7 @@ begin
 
     gemspec.version     = Merb::Helpers::VERSION
 
-    gemspec.name        = "merb-haml"
+    gemspec.name        = "merb-helpers"
     gemspec.description = "Merb plugin containing view helpers"
     gemspec.summary     = "Merb plugin that provides helpers for writing HTML templates"
 

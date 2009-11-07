@@ -15,7 +15,7 @@ begin
 
     gemspec.version     = Merb::Cache::VERSION
 
-    gemspec.name        = "merb-assets"
+    gemspec.name        = "merb-cache"
     gemspec.description = "Merb plugin for supporting assets"
     gemspec.summary     = "Merb plugin that provides caching (page, action, fragment, object)"
 

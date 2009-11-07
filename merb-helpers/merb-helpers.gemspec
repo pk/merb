@@ -4,12 +4,12 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{merb-haml}
+  s.name = %q{merb-helpers}
   s.version = "1.1.0.pre"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael D. Ivey"]
-  s.date = %q{2009-11-06}
+  s.date = %q{2009-11-07}
   s.description = %q{Merb plugin containing view helpers}
   s.email = %q{ivey@gweezlebur.com}
   s.extra_rdoc_files = [
