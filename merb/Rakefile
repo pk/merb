@@ -46,10 +46,6 @@ begin
     gemspec.add_dependency "dm-serializer",         Merb::DataMapper::DM_VERSION_REQUIREMENT
     gemspec.add_dependency "dm-constraints",        Merb::DataMapper::DM_VERSION_REQUIREMENT
 
-    # Development dependencies
-    gemspec.add_development_dependency 'rspec',     '>= 1.2.9'
-    gemspec.add_development_dependency 'webrat',    '>= 0.3.1'
-
     # Requirements
     gemspec.requirements << "install the json gem to get faster json parsing"
     gemspec.required_ruby_version = ">= 1.8.6"
