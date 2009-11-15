@@ -257,13 +257,17 @@ describe "External JavaScript and Stylesheets" do
   end
 
   it "should create a js include tag with the extension specified" do
-    js_include_tag('jquery.js').should ==
-      "<script type=\"text/javascript\" src=\"/javascripts/jquery.js\"></script>"
+    result = js_include_tag('jquery.js')
+    result.scan(/<script/).should have(1).things
+    result.should match(%r{src="/javascripts/jquery.js"})
+    result.should match(%r{type="text/javascript"})
   end
 
   it "should create a js include tag and and the extension" do
-    js_include_tag('jquery').should ==
-      "<script type=\"text/javascript\" src=\"/javascripts/jquery.js\"></script>"
+    result =js_include_tag('jquery')
+    result.scan(/<script/).should have(1).things
+    result.should match(%r{src="/javascripts/jquery.js"})
+    result.should match(%r{type="text/javascript"})
   end
 
   it "should create a js include tag for multiple includes" do
@@ -356,8 +360,10 @@ describe "External JavaScript and Stylesheets" do
   end
 
   it "should create a uniq js tag for a single js file" do
-    uniq_js_tag("my").should ==
-      "<script type=\"text/javascript\" src=\"http://assets2.my-awesome-domain.com/javascripts/my.js\"></script>"
+    result = uniq_js_tag("my")
+    result.scan(/<script/).should have(1).things
+    result.should match(%r{src="http://assets2.my-awesome-domain.com/javascripts/my.js"})
+    result.should match(%r{type="text/javascript"})
   end
 
   it "should create a uniq js tag for each js file specified" do
