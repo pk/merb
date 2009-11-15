@@ -471,6 +471,8 @@ module Merb
     #   will be added to them.
     #
     # ==== Options
+    # :charset<~to_s>::
+    #   Charset which will be used as value for charset attribute
     # :bundle<~to_s>::
     #   The name of the bundle the scripts should be combined into.
     # :prefix<~to_s>::
@@ -486,26 +488,29 @@ module Merb
     #
     # ==== Examples
     #   js_include_tag 'jquery'
-    #   # => <script src="/javascripts/jquery.js" type="text/javascript"></script>
+    #   # => <script src="/javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+    #
+    #   js_include_tag 'jquery', :charset => 'iso-8859-1'
+    #   # => <script src="/javascripts/jquery.js" type="text/javascript" charset="iso-8859-1"></script>
     #
     #   js_include_tag 'moofx.js', 'upload'
-    #   # => <script src="/javascripts/moofx.js" type="text/javascript"></script>
-    #   #    <script src="/javascripts/upload.js" type="text/javascript"></script>
+    #   # => <script src="/javascripts/moofx.js" type="text/javascript" charset="utf-8"></script>
+    #   #    <script src="/javascripts/upload.js" type="text/javascript" charset="utf-8"></script>
     #
     #   js_include_tag :effects
-    #   # => <script src="/javascripts/effects.js" type="text/javascript"></script>
+    #   # => <script src="/javascripts/effects.js" type="text/javascript" charset="utf-8"></script>
     #
     #   js_include_tag :jquery, :validation
-    #   # => <script src="/javascripts/jquery.js" type="text/javascript"></script>
-    #   #    <script src="/javascripts/validation.js" type="text/javascript"></script>
+    #   # => <script src="/javascripts/jquery.js" type="text/javascript" charset="utf-8"></script>
+    #   #    <script src="/javascripts/validation.js" type="text/javascript" charset="utf-8"></script>
     #
     #   js_include_tag :application, :validation, :prefix => "http://cdn.example.com"
-    #   # => <script src="http://cdn.example.com/javascripts/application.js" type="text/javascript"></script>
-    #   #    <script src="http://cdn.example.com/javascripts/validation.js" type="text/javascript"></script>
+    #   # => <script src="http://cdn.example.com/javascripts/application.js" type="text/javascript" charset="utf-8"></script>
+    #   #    <script src="http://cdn.example.com/javascripts/validation.js" type="text/javascript" charset="utf-8"></script>
     #
     #   js_include_tag :application, :validation, :suffix => ".#{MyApp.version}"
-    #   # => <script src="/javascripts/application.1.0.3.js" type="text/javascript"></script>
-    #   #    <script src="/javascripts/validation.1.0.3.js" type="text/javascript"></script>
+    #   # => <script src="/javascripts/application.1.0.3.js" type="text/javascript" charset="utf-8"></script>
+    #   #    <script src="/javascripts/validation.1.0.3.js" type="text/javascript" charset="utf-8"></script>
     def js_include_tag(*scripts)
       options = scripts.last.is_a?(Hash) ? scripts.pop : {}
       return nil if scripts.empty?
@@ -535,7 +540,8 @@ module Merb
 
         attrs = {
           :src => src,
-          :type => "text/javascript"
+          :type => "text/javascript",
+          :charset => options[:charset] || "utf-8"
         }
         tags << %Q{<script #{attrs.to_xml_attributes}></script>}
       end
@@ -550,6 +556,8 @@ module Merb
     #   names, it will be added to them.
     #
     # ==== Options
+    # :charset<~to_s>::
+    #   Charset which will be used as value for charset attribute
     # :bundle<~to_s>::
     #   The name of the bundle the stylesheets should be combined into.
     # :media<~to_s>::
@@ -622,7 +630,7 @@ module Merb
           :href => href,
           :type => "text/css",
           :rel => "Stylesheet",
-          :charset => options[:charset] || 'utf-8',
+          :charset => options[:charset] || "utf-8",
           :media => options[:media] || :all
         }
         tags << %Q{<link #{attrs.to_xml_attributes} />}
