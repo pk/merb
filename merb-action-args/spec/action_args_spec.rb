@@ -5,7 +5,19 @@ describe "ActionArgs" do
   it "should not accidently introduce any methods as controller actions" do
     Merb::Controller.callable_actions.should be_empty
   end
-  
+
+  it "should extract explicit one arg" do
+    ActionArgs.instance_method(:index).get_args.should == [[[:foo]], []]
+  end
+
+  it "should extract explicit multi args" do
+    ActionArgs.instance_method(:multi).get_args.should == [[[:foo], [:bar]], []]
+  end
+
+  it "should extract optional args" do
+    ActionArgs.instance_method(:with_default_nil).get_args.should == [[[:foo], [:bar, nil]], [:bar]]
+  end
+
 end
 
 describe Merb::AbstractController do
