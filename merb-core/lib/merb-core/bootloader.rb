@@ -381,7 +381,6 @@ class Merb::BootLoader::Dependencies < Merb::BootLoader
     end
     expand_ruby_path
     load_dependencies
-    enable_json_gem unless Merb::disabled?(:json)
     update_logger
     nil
   end
@@ -400,54 +399,14 @@ class Merb::BootLoader::Dependencies < Merb::BootLoader
   # :api: private
   def self.load_dependencies
     begin
-
-      gemfile = Merb.root / (Merb::Config[:gemfile] || 'Gemfile')
-      Merb::Config[:gemfile] = File.exists?(gemfile) ? gemfile : nil
-
-      # Try to load the bundled environment from Merb::Config[:gemenv]
-      # default to ./gems/environment.rb
-      bundler_environment = Merb.root / (Merb::Config[:gemenv] || "gems" / "environment")
-      Merb.logger.warn!("Loading Bundler environment from: #{bundler_environment}")
-      require bundler_environment
-
-      # Require the bundler environment
-      Bundler.require_env(Merb.environment)
-    rescue LoadError
-      Merb.logger.warn! "It seems we're not bundled. There might be problem " /
-                        "with gems as well! In that case you should get an " /
-                        "exception later."
-      # Default to using system rubygems if not bundled
-      require "rubygems"
-      if Merb::Config[:gemfile]
-        require "bundler"
-        Merb.logger.debug!("Loading Gemfile from #{Merb::Config[:gemfile]}") if Merb.verbose_logging?
-        if Bundler::Bundle.respond_to?(:load)
-          Bundler::Bundle.load(Merb::Config[:gemfile]).environment.require_env(Merb.environment)
-        else
-          Bundler::Dsl.load_gemfile(Merb::Config[:gemfile]).require_env(Merb.environment)
-        end
-      else
-        Merb.logger.warn!("Couldn't find a Gemfile. No dependencies will be loaded.")
-      end
+      Bundler.require(:default, Merb.environment.to_sym)
+    rescue Bundler::GemfileNotFound
+      Merb.logger.error! "No Gemfile found! If you're generating new app with merb-gen " \
+                         "this is fine, otherwise run: bundle init to create Gemfile"
     end
     nil
   end
   
-  # Requires json or json_pure.
-  #
-  # ==== Returns
-  # nil
-  #
-  # :api: private
-  def self.enable_json_gem
-    require "json"
-    rescue LoadError
-        Merb.logger.error! "You have enabled JSON but don't have json " \
-                           "installed or don't have dependency in the Gemfile. " \
-                           "Add \"gem 'json', '>= 1.1.7'\" or " \
-                           "\"gem 'json_pure', '>= 1.1.7'\" to your Gemfile."
-  end
-
   # Resets the logger and sets the log_stream to Merb::Config[:log_file]
   # if one is specified, falling back to STDOUT.
   #
