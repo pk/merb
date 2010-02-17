@@ -20,7 +20,7 @@ module Merb::Helpers::Form
     if name.is_a?(String) || name.is_a?(Symbol)
       ivar = instance_variable_get("@#{name}")
     else
-      ivar, name = name, name.class.to_s.snake_case
+      ivar, name = name, name.class.to_s.snake_case.split('::').last
     end
     builder ||= current_form_context.class if current_form_context
     (builder || self._default_builder).new(ivar, name, self)

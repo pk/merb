@@ -142,7 +142,7 @@ module Merb::Helpers::Form::Builder
 
     # This can be overridden to use another method to fake out methods
     def fake_out_method(attrs, method)
-      self_closing_tag(:input, :type => "hidden", :name => "_method", :value => method)
+      unbound_hidden_field(:name => "_method", :value => method)
     end
 
     def update_bound_controls(method, attrs, type)

@@ -131,13 +131,13 @@ describe "form" do
   it "should fake out the put method if set" do
     ret = @c.render(:fake_put_if_set)
     ret.should have_selector("form[method=post]")
-    ret.should have_selector("input[type=hidden][name=_method][value=put]")
+    ret.should have_selector("input[type=hidden][name=_method][value=put][class=hidden]")
   end
 
   it "should fake out the delete method if set" do
     ret = @c.render(:fake_delete_if_set)
     ret.should have_selector("form[method=post]")
-    ret.should have_selector("input[type=hidden][name=_method][value=delete]")
+    ret.should have_selector("input[type=hidden][name=_method][value=delete][class=hidden]")
   end
 
   # TODO: Why is this required?
@@ -232,6 +232,13 @@ describe "fields_for" do
     r = @c.render :midstream
     r.should have_selector("input[id=fake_model_foo][name='fake_model[foo]'][type=text][extra=true]")
   end
+
+  it "should be able to handle namespaced models by setting name attribute to concrete class name" do
+    @c.instance_variable_set(:@obj2, MyNamespace::NamespacedFakeModel.new)
+    r = @c.render :midstream
+    r.should have_selector("input[type=text][value=foowee]")
+    r.should have_selector("input[name='namespaced_fake_model[foo]'][type=text][value=named_foo]")
+  end
 end
 
 describe "text_field" do
@@ -277,6 +284,12 @@ describe "bound_text_field" do
   it "should take a string object and return a useful text control" do
     r = @c.render :basic
     r.should have_selector("input[type=text][id=fake_model_foo][name='fake_model[foo]'][value=foowee]")
+  end
+
+  it "should take a namespaced model and return correct fieldname" do
+    @c.instance_variable_set(:@obj, MyNamespace::NamespacedFakeModel.new)
+    r = @c.render :basic
+    r.should have_selector("input[type=text][id=namespaced_fake_model_foo][name='namespaced_fake_model[foo]'][value=named_foo]")
   end
 
   it "should take additional attributes and use them" do
@@ -625,9 +638,14 @@ describe "hidden_field" do
     @c = HiddenFieldSpecs.new(Merb::Request.new({}))
   end
 
-  it "should return a basic checkbox based on the values passed in" do
+  it "should return a basic hidden field based on the values passed in" do
     r = @c.render :basic
     r.should match_tag(:input, :type => "hidden", :id => "foo", :name => "foo", :value => "bar")
+  end
+
+  it "should have class 'hidden' by default" do
+    r = @c.render :basic
+    r.should match_tag(:input, :type => "hidden", :class => 'hidden')
   end
 
   it "should not render a label if the :label option is passed in" do
