@@ -1,6 +1,19 @@
-== 1.1.0 "" 2009-11-
+== 1.1.0.rc2 "" 2010-03-16
 
-* !!!BC!!! Dependency handling using Bundler
+* [merb-core]    #1040 Allow using <%== %> escaped version of <%= %>
+* [merb-core]    #1174 Merb::Config[:use_mutex] issue
+* [merb-helpers] #1212 Merb::Helpers::Form::Builder Base#options doesn't convert 'sel' to string before comparing to string
+* [merb-core]    #1304 Multipart input parsing produces wrong checkbox input
+* [merb-core]    #1310 Prevent mongrel bloat when streaming files
+
+== 1.1.0.rc1 "Angry Unicorns" 2010-03-16
+
+* Unicorn compatibility, see: http://wiki.github.com/merb/merb/howto-use-unicorn 
+* Many spec tweaks to make specs green
+
+== 1.1.0.pre
+
+* Dependency handling using Bundler (Backward compatibility break)
   In this version we dropped old way of loading dependencies using the Kernel
   extensions and started to use Bundler for dependency management. This allows
   us to move the whole dependency handling and gem management outside the
