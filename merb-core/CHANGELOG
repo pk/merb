@@ -1,4 +1,4 @@
-== 1.1.0.rc2 "" 2010-03-16
+== 1.1.0 "Black hole" 2010-03-20
 
 * [merb-core]    #1040 Allow using <%== %> escaped version of <%= %>
 * [merb-core]    #1174 Merb::Config[:use_mutex] issue
