@@ -1,4 +1,5 @@
 require "rubygems"
+require "json"
 
 # Use current merb-core sources if running from a typical dev checkout.
 lib = File.expand_path('../../../merb-core/lib', __FILE__)

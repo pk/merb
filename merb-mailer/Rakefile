@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::Mailer::VERSION
+    gemspec.version     = Merb::Mailer::VERSION.dup
 
     gemspec.name        = "merb-mailer"
     gemspec.description = "Merb plugin for mailer support"

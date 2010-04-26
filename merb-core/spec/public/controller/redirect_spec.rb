@@ -19,6 +19,18 @@ describe Merb::Controller, " redirects" do
     @controller.headers["Location"].should == "/"
   end
 
+  it "recirect with :permanent and :stauts use :status" do
+    @controller = dispatch_to(Merb::Test::Fixtures::Controllers::PermanentAndStatusRedirect, :index)
+    @controller.status.should == 302
+    @controller.headers["Location"].should == "/"
+  end
+
+  it "redirect with status" do
+    @controller = dispatch_to(Merb::Test::Fixtures::Controllers::WithStatusRedirect, :index)
+    @controller.status.should == 307
+    @controller.headers["Location"].should == "/"
+  end
+
   it "redirects with messages" do
     @controller = dispatch_to(Merb::Test::Fixtures::Controllers::RedirectWithMessage, :index)
     @controller.status.should == 302
@@ -48,9 +60,13 @@ describe Merb::Controller, " redirects" do
   end
 
   it "consumes redirects with messages" do
-    message = Merb::Parse.escape([Marshal.dump(:notice => "what?")].pack("m"))
-    @controller = dispatch_to(Merb::Test::Fixtures::Controllers::ConsumesMessage, :index, {:_message => message})
-    @controller.body.should == "\"what?\""
+    Merb::Router.prepare do
+      match('/consumes_message')
+      .to(:controller => 'merb/test/fixtures/controllers/consumes_message', :action => 'index')
+    end
+    expected_url = Merb::Parse.escape([Marshal.dump(:notice => '<b>1 > 2 + 100</b>')].pack('m'))
+    response = visit("/consumes_message?_message=#{expected_url}")
+    response.body.to_s.should == '<b>1 > 2 + 100</b>'
   end
   
   it "supports setting the message for use immediately" do

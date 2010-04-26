@@ -1,3 +1,4 @@
+require 'merb-core'
 require 'merb-assets/assets'
 require 'merb-assets/assets_mixin'
 
@@ -11,6 +12,7 @@ Merb::Plugins.config[:asset_helpers] = {
     :asset_domain => "assets%s",
     :domain => "my-awesome-domain.com",
     :use_ssl => false,
+    :asset_timestamp => false,
     
     # Global prefix/suffix for css/js include tags, overridable in js_include_tag and css_include_tag
     #

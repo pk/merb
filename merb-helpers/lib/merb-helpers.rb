@@ -1,10 +1,12 @@
+require "merb-core"
+
 module Merb
-  
+
   module Helpers
-    
+
     @@helpers_dir   = File.dirname(__FILE__) / 'merb-helpers'
     @@helpers_files = Dir["#{@@helpers_dir}/*_helpers.rb"].collect {|h| h.match(/\/(\w+)\.rb/)[1]}
-    
+
     def self.load
 
       require 'merb-helpers/time_dsl'
@@ -13,7 +15,7 @@ module Merb
 
       if Merb::Plugins.config[:merb_helpers]
         config = Merb::Plugins.config[:merb_helpers]
-        
+
         if config[:include] && !config[:include].empty?
           load_helpers(config[:include])
         else
@@ -21,20 +23,20 @@ module Merb
           # but doesn't put in a with or without option
           load_helpers
         end
-        
+
       else
         load_helpers
       end
     end
-    
+
     # Load only specific helpers instead of loading all the helpers
     def self.load_helpers(helpers = @@helpers_files)
       helpers = helpers.is_a?(Array) ? helpers : [helpers]
       helpers.each {|helper| Kernel.load(File.join(@@helpers_dir, "#{helper}.rb") )} # using load here allows specs to work
     end
-    
+
   end
-  
+
 end
 
 Merb::Helpers.load

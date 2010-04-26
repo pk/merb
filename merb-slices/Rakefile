@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::Slices::VERSION
+    gemspec.version     = Merb::Slices::VERSION.dup
 
     gemspec.name        = "merb-slices"
     gemspec.description = "Merb plugin that supports reusable application 'slices'."

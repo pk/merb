@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::ActionArgs::VERSION
+    gemspec.version     = Merb::ActionArgs::VERSION.dup
 
     gemspec.name        = "merb-action-args"
     gemspec.description = "Merb plugin that supports controller action arguments"

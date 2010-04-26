@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::Haml::VERSION
+    gemspec.version     = Merb::Haml::VERSION.dup
 
     gemspec.name        = "merb-haml"
     gemspec.description = "Merb plugin for HAML support"

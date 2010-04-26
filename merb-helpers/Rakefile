@@ -15,7 +15,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::Helpers::VERSION
+    gemspec.version     = Merb::Helpers::VERSION.dup
 
     gemspec.name        = "merb-helpers"
     gemspec.description = "Merb plugin containing view helpers"

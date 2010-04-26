@@ -937,11 +937,31 @@ describe "select" do
     r.should have_selector("select[name=foo] option:contains('three')")
   end
   
-  it "should allow selecting an option by passing in :selected => 'three'" do
+  it "should allow selecting an option by passing in :selected => string" do
+    @c.instance_variable_set(:@collection, %w(one two three))
+    @c.instance_variable_set(:@selected, 'three')
     r = @c.render :selected
     r.should_not have_selector("select[name=foo] option[selected]:contains('one')")
     r.should_not have_selector("select[name=foo] option[selected]:contains('two')")
     r.should have_selector("select[name=foo] option[selected]:contains('three')")
+  end
+
+  it "should allow selecting an option by passing in :selected => integer" do
+    @c.instance_variable_set(:@collection, %w(1 2 3))
+    @c.instance_variable_set(:@selected, 3)
+    r = @c.render :selected
+    r.should_not have_selector("select[name=foo] option[selected]:contains('1')")
+    r.should_not have_selector("select[name=foo] option[selected]:contains('2')")
+    r.should have_selector("select[name=foo] option[selected]:contains('3')")
+  end
+
+  it "should allow selecting an option by passing in :selected => [integers]" do
+    @c.instance_variable_set(:@collection, %w(1 2 3))
+    @c.instance_variable_set(:@selected, [2, 3])
+    r = @c.render :selected
+    r.should_not have_selector("select[name=foo] option[selected]:contains('1')")
+    r.should have_selector("select[name=foo] option[selected]:contains('2')")
+    r.should have_selector("select[name=foo] option[selected]:contains('3')")
   end
 
   it "should render the select tag with suffix '[]' to name when :multiple => true" do

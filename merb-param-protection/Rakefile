@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::ParamProtection::VERSION
+    gemspec.version     = Merb::ParamProtection::VERSION.dup
 
     gemspec.name        = "merb-param-protection"
     gemspec.description = "Merb plugin that helps protecting sensible parameters"

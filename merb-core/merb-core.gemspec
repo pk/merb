@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{merb-core}
-  s.version = "1.1.0.pre"
+  s.version = "1.1.0"
 
-  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Ezra Zygmuntowicz"]
-  s.date = %q{2010-02-10}
+  s.date = %q{2010-03-20}
   s.default_executable = %q{merb}
   s.description = %q{Merb. Pocket rocket web framework.}
   s.email = %q{ez@engineyard.com}
@@ -260,6 +260,7 @@ Gem::Specification.new do |s|
      "spec/public/controller/spec_helper.rb",
      "spec/public/controller/streaming_spec.rb",
      "spec/public/controller/url_spec.rb",
+     "spec/public/core/config_spec.rb",
      "spec/public/core/merb_core_spec.rb",
      "spec/public/core_ext/kernel_spec.rb",
      "spec/public/core_ext/spec_helper.rb",
@@ -2258,7 +2259,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://merbivore.com/}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.5}
+  s.rubygems_version = %q{1.3.6}
   s.summary = %q{Merb plugin that provides caching (page, action, fragment, object)}
 
   if s.respond_to? :specification_version then

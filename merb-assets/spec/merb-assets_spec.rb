@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+Merb.push_path(:public, 'spec/fixtures/')
+
 include Merb::AssetsMixin
 
 describe "Accessing Assets" do
@@ -182,6 +184,33 @@ describe "With Merb::Config[:reload_templates] set," do
   end
 end
 
+describe "With Merb::Plugins.config[:asset_helpers][:asset_timestamp] set," do
+  before(:all) do
+    Merb::Plugins.config[:asset_helpers][:asset_timestamp] = true
+  end
+  after(:all) do
+    Merb::Plugins.config[:asset_helpers][:asset_timestamp] = false
+  end
+
+  it "should create image tag with absolute url" do
+    image_tag('http://example.com/foo.gif').should ==
+      "<img src=\"http://example.com/foo.gif\" />"
+  end
+
+  it "should not add timestamp to the image tag with absolute url if :timestamp option is set" do
+    image_tag('http://example.com/foo.gif', :timestamp => true).should =~
+      %r{<img src="http://example.com/foo.gif" />}
+  end
+
+  it "should create image tag with relative url" do
+    image_tag('merb.jpg').should =~ %r{<img src="/images/merb.jpg\?\d+" />}
+  end
+
+  it "should create image tag with relative url and timestamp which is provided" do
+    image_tag('merb.jpg', :timestamp => 123456789).should =~ %r{<img src="/images/merb.jpg\?123456789" />}
+  end
+end
+
 describe "JavaScript related functions" do
   it "should escape js having quotes" do
     escape_js("'Lorem ipsum!' -- Some guy").should ==
@@ -313,16 +342,72 @@ describe "External JavaScript and Stylesheets" do
     result.should match(%r{/stylesheets/layout.css})
   end
    
-  it "should create a js include tag with a random query string" do
-    Merb::Config[:reload_templates] = true
-    result = js_include_tag('jquery.js')
-    result.should match(%r{/javascripts/jquery.js\?\d+})
-    Merb::Config[:reload_templates] = false
+  describe "with Merb::Config[:reload_templates] set" do
+    it "should create a js include tag with a random query string" do
+      Merb::Config[:reload_templates] = true
+      result = js_include_tag('jquery.js')
+      result.should match(%r{/javascripts/jquery.js\?\d+})
+      Merb::Config[:reload_templates] = false
+    end
+
+    it "should create a css include tag with a random query string" do
+      Merb::Config[:reload_templates] = true
+      result = css_include_tag('style.css')
+      result.should match(%r{/stylesheets/style.css\?\d+})
+      Merb::Config[:reload_templates] = false
+    end
   end
 
-  it "should create a css include tag with a random query string" do
-    result = css_include_tag('style.css', :reload => true)
-    result.should match(%r{/stylesheets/style.css\?\d+})
+  describe "with Merb::Plugins.config[:asset_helpers][:asset_timestamp] set" do
+    it "should create a css include tag with a timestamp query string" do
+      Merb::Plugins.config[:asset_helpers][:asset_timestamp] = true
+      result = css_include_tag('style.css')
+      result.should match(%r{/stylesheets/style.css\?\d+})
+      Merb::Plugins.config[:asset_helpers][:asset_timestamp] = false
+    end
+
+    it "should create a js include tag with a timestamp query string" do
+      Merb::Plugins.config[:asset_helpers][:asset_timestamp] = true
+      result = js_include_tag('jquery.js')
+      result.should match(%r{/javascripts/jquery.js\?\d+})
+      Merb::Plugins.config[:asset_helpers][:asset_timestamp] = false
+    end
+  end
+
+  describe "with :reload => true" do
+    it "should create a js include tag with a random query string" do
+      result = js_include_tag('jquery.js', :reload => true)
+      result.should match(%r{/javascripts/jquery.js\?\d+})
+    end
+
+    it "should create a css include tag with a random query string" do
+      result = css_include_tag('style.css', :reload => true)
+      result.should match(%r{/stylesheets/style.css\?\d+})
+    end
+  end
+
+  describe "with :timestamp => true" do
+    it "should create a js include tag with a timestamp query string" do
+      result = js_include_tag('jquery.js', :timestamp => true)
+      result.should match(%r{/javascripts/jquery.js\?\d+})
+    end
+
+    it "should create a css include tag with a timestamp query string" do
+      result = css_include_tag('style.css', :timestamp => true)
+      result.should match(%r{/stylesheets/style.css\?\d+})
+    end
+  end
+
+  describe "with :timestamp => 123456789" do
+    it "should create a js include tag with a 123456789 timestamp query string" do
+      result = js_include_tag('jquery.js', :timestamp => 123456789)
+      result.should match(%r{/javascripts/jquery.js\?123456789})
+    end
+
+    it "should create a css include tag with a 123456789 timestamp query string" do
+      result = css_include_tag('style.css', :timestamp => 123456789)
+      result.should match(%r{/stylesheets/style.css\?123456789})
+    end
   end
   
   it "should create a css include tag with the specified media" do

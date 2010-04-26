@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::Cache::VERSION
+    gemspec.version     = Merb::Cache::VERSION.dup
 
     gemspec.name        = "merb-cache"
     gemspec.description = "Merb plugin for supporting assets"

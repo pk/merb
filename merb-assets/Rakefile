@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::Assets::VERSION
+    gemspec.version     = Merb::Assets::VERSION.dup
 
     gemspec.name        = "merb-assets"
     gemspec.description = "Merb plugin for supporting assets"

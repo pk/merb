@@ -1,3 +1,84 @@
+== Merb 1.1.0 "Black Hole" 2010-03-22
+
+=== New Features
+
+* Ruby 1.9 support. The big one. Merb now runs on ruby 1.9.1. This mandated some
+  small changes to the internals as well as some changes to the specs. However,
+  it shouldn't require any changes in your app level code, or at least the merb
+  specific parts of your app level code.
+
+* Dependency handling with bundler. This is a breaking change. But it
+  should be for the better. Bundler replaces the previous dependencies.rb with a
+  Gemfile. It also replaces the Thor tasks for freezing gems. The Gemfile is
+  used to work out dependencies before any code is required. This avoids much of
+  the dependency hell.
+
+* Unicorns! Merb is now better behaved as a rack app and works with a config.ru
+  file. This change should make working with whatever is the latest and
+  greatest ruby webserver a lot easier.
+
+* mongoid support for merb-auth-more's SaltedUser class. Thanks to anvar for
+  the patch.
+
+* asset timestamping for static assets. This appends a short query string to
+  static assets, allowing long cache expiry times to be set. Thanks for pavel
+  for this patch.
+
+* Bugfixes. So many bug fixes. As part of the release process we've done our
+  best to clear out many of the bugs which have been gathering dust over the
+  past year. Some do still remain, but those generally require a more complex
+  solution which needs some thought.
+
+
+=== Dependency handling using Bundler
+
+In this version we dropped the old way of loading dependencies using the Kernel
+extensions and started to use Bundler for dependency management. This allows
+us to move the whole dependency handling and gem management outside the
+Merb. Therefore we can simplify some internals and remove some of the Kernel
+monkey patching:
+
+The old Kernel.dependency and Kernel.dependencies will only 'require
+gem_name' or 'require require_as' when you call these methods. They will loudly
+inform you of the fact via depreciation warnings too. If you see the warning,
+you should move your dependency to the Gemfile.
+
+Also methods: use_orm, use_test, use_testing_framework and use_template_engine
+DON'T require any gems now, you must add them as dependencies in the Gemfile.
+
+Merb generators was changed to generate you Gemfile for your application and
+settings instead of the dependencies.rb.
+
+So what still works? Almost everything except it doesn't defer to the Merb
+start and doesn't load exact version of gem if more versions are installed:
+
+dependency "json"                           => works
+dependency "rspec", :require_as => 'spec'   => works try to require 'spec'
+dependency "json", '1.1.6'                  => works unless you have
+                                               >= 1.1.6 installed
+dependency "json" { }                       => works but doesn't yield
+
+For more information, check the wiki.
+
+=== Bug fixes
+
+* [merb-assets]  #859  Merb can append timestamps to static assets
+* [merb-core]    #1040 Allow using <%== %> escaped version of <%= %>
+* [merb-core]    #1068 Correctly handle HEAD requests (This requires manual
+  alteration of rack.rb)
+* [merb-core]    #1174 Merb::Config[:use_mutex] issue
+* [merb-helpers] #1212 Merb::Helpers::Form::Builder Base#options doesn't convert
+  'sel' to string before comparing to string
+* [merb-core]    #1258 Sessions could be overwritten under certain (rare)
+  situations.
+* [merb-core]    #1288 Fix for run_later in clusters
+* [merb-core]    #1298 Fix potential timing attack on cookie sessions.
+* [merb-core]    #1304 Multipart input parsing produces wrong checkbox input
+* [merb-core]    #1310 Prevent mongrel bloat when streaming files
+* [merb-core]    #1317 Merb now returns correct cookie headers
+* [merb-core]    Improvements to handling of conditional validators
+* And more ... checkout the repository and the lighthouse.
+
 == 1.0.1
 * generate unique session_id_key with new apps
 

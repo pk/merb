@@ -12,7 +12,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::VERSION
+    gemspec.version     = Merb::VERSION.dup
 
     gemspec.name        = "merb"
     gemspec.description = "The Merb stack"

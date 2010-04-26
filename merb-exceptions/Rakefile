@@ -14,7 +14,7 @@ begin
 
   Jeweler::Tasks.new do |gemspec|
 
-    gemspec.version     = Merb::Exceptions::VERSION
+    gemspec.version     = Merb::Exceptions::VERSION.dup
 
     gemspec.name        = "merb-exceptions"
     gemspec.description = "Merb plugin that supports exception notification"

@@ -173,6 +173,9 @@ module Merb
           config[:bind_fail_fatal] = dev_mode
         end
         
+        # Set mutex to dispatcher
+        ::Merb::Dispatcher.use_mutex = config[:use_mutex]
+
         @configuration = config
       end
 
@@ -284,7 +287,7 @@ module Merb
           adapters = [:mongrel, :emongrel, :thin, :ebb, :fastcgi, :webrick]
 
           opts.on("-a", "--adapter ADAPTER",
-                  "The rack adapter to use to run merb (default is mongrel)" \
+                  "The rack adapter to use to run merb (default is thin)" \
                   "[#{adapters.join(', ')}]") do |adapter|
             options[:adapter] ||= adapter
           end

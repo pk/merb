@@ -262,9 +262,9 @@ module Merb::Helpers::Form::Builder
 
         option_attrs = {:value => value}
         if sel.is_a?(Array)
-          option_attrs.merge!(:selected => "selected") if value.in? sel
+          option_attrs.merge!(:selected => "selected") if value.in? sel.map {|e| e.to_s }
         else
-          option_attrs.merge!(:selected => "selected") if value == sel
+          option_attrs.merge!(:selected => "selected") if value == sel.to_s
         end
         tag(:option, text, option_attrs)
       end).join
